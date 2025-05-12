@@ -4,6 +4,9 @@ import { searchServices, addToFavorites, removeFromFavorites, getFavorites } fro
 const prisma = new PrismaClient();
 
 describe('Service Search', () => {
+  let testUserId: number;
+  let testServiceId: number;
+
   beforeAll(async () => {
     // Clean up database before tests
     await prisma.favorite.deleteMany();
@@ -17,6 +20,7 @@ describe('Service Search', () => {
         name: 'Test User',
       },
     });
+    testUserId = user.id;
 
     const service = await prisma.service.create({
       data: {
@@ -27,13 +31,7 @@ describe('Service Search', () => {
         address: 'Test Address',
       },
     });
-
-    await prisma.favorite.create({
-      data: {
-        userId: user.id,
-        serviceId: service.id,
-      },
-    });
+    testServiceId = service.id;
   });
 
   afterAll(async () => {
@@ -52,17 +50,23 @@ describe('Service Search', () => {
   });
 
   it('should add and remove favorites', async () => {
-    const user = await prisma.user.findFirst();
-    const service = await prisma.service.findFirst();
+    // First remove any existing favorites
+    await prisma.favorite.deleteMany({
+      where: {
+        userId: testUserId,
+        serviceId: testServiceId,
+      },
+    });
 
-    if (user && service) {
-      await addToFavorites(user.id, service.id);
-      const favorites = await getFavorites(user.id);
-      expect(favorites.length).toBeGreaterThan(0);
+    // Add to favorites
+    await addToFavorites(testUserId, testServiceId);
+    const favorites = await getFavorites(testUserId);
+    expect(favorites.length).toBeGreaterThan(0);
+    expect(favorites[0].id).toBe(testServiceId);
 
-      await removeFromFavorites(user.id, service.id);
-      const updatedFavorites = await getFavorites(user.id);
-      expect(updatedFavorites.length).toBe(0);
-    }
+    // Remove from favorites
+    await removeFromFavorites(testUserId, testServiceId);
+    const updatedFavorites = await getFavorites(testUserId);
+    expect(updatedFavorites.length).toBe(0);
   });
 }); 
