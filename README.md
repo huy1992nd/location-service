@@ -68,51 +68,124 @@ MYSQL_DATABASE=location_services
 ## Setup
 
 ### Option 1: Local Development
-1. Clone the repository git@github.com:huy1992nd/location-service.git
+1. Clone the repository:
+   ```bash
+   git clone git@github.com:huy1992nd/location-service.git
+   cd location-service
+   ```
+
 2. Install dependencies:
    ```bash
    npm install
    ```
-3. Create a `.env` file in the root directory with the required environment variables
-4. Initialize the database:
-   ```bash
-   npx prisma migrate dev
+
+3. Create a `.env` file in the root directory with the following variables:
+   ```env
+   # Database
+   DATABASE_URL="mysql://root:password@localhost:3306/location_services"
+
+   # Server
+   PORT=3000
+   NODE_ENV=development
    ```
-5. Seed the database with sample data:
+
+4. Start MySQL database:
    ```bash
-   npx prisma db seed
+   # If using Docker
+   docker run --name mysql-db -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=location_services -p 3306:3306 -d mysql:8
+
+   # Or start your local MySQL service
+   # For macOS:
+   brew services start mysql
+   # For Ubuntu:
+   sudo service mysql start
    ```
-6. Build the project:
+
+5. Initialize the database:
    ```bash
+   # Generate Prisma client
+   npm run prisma:generate
+
+   # Run database migrations
+   npm run prisma:migrate
+
+   # Seed the database with sample data
+   npm run prisma:seed
+   ```
+
+6. Start the development server:
+   ```bash
+   # Development mode with hot-reload
+   npm run dev
+
+   # Or build and start in production mode
    npm run build
-   ```
-7. Start the server:
-   ```bash
    npm start
    ```
 
-### Option 2: Docker Setup
-1. Clone the repository
-2. Build and start the containers:
+7. Run tests:
    ```bash
-   docker-compose up --build
-   ```
-   This will:
-   - Build the Node.js application
-   - Start a MySQL database
-   - Run database migrations
-   - Seed the database
-   - Start the application server
+   # Run all tests
+   npm test
 
-3. To stop the containers:
-   ```bash
-   docker-compose down
+   # Run tests in watch mode
+   npm run test:watch
+
+   # Run tests with coverage report
+   npm run test:coverage
    ```
 
-4. To view logs:
-   ```bash
-   docker-compose logs -f
-   ```
+8. Access the application:
+   - API: http://localhost:3000
+   - Swagger Documentation: http://localhost:3000/api-docs
+   - Prisma Studio (Database GUI): http://localhost:5555 (run `npm run prisma:studio` to start)
+
+### Development Commands Reference
+```bash
+# Start development server with hot-reload
+npm run dev
+
+# Build the project
+npm run build
+
+# Start production server
+npm start
+
+# Database commands
+npm run prisma:generate    # Generate Prisma client
+npm run prisma:migrate     # Run database migrations
+npm run prisma:seed        # Seed the database
+npm run prisma:studio      # Open Prisma Studio
+
+# Testing commands
+npm test                   # Run all tests
+npm run test:watch         # Run tests in watch mode
+npm run test:coverage      # Run tests with coverage
+```
+
+### Troubleshooting
+1. **Database Connection Issues**:
+   - Ensure MySQL is running
+   - Check database credentials in `.env`
+   - Verify database port (default: 3306)
+
+2. **Port Already in Use**:
+   - Change PORT in `.env`
+   - Or kill the process using the port:
+     ```bash
+     # Find process using port 3000
+     lsof -i :3000
+     # Kill the process
+     kill -9 <PID>
+     ```
+
+3. **Prisma Issues**:
+   - Clear Prisma cache: `rm -rf node_modules/.prisma`
+   - Regenerate Prisma client: `npm run prisma:generate`
+
+4. **TypeScript Errors**:
+   - Clear TypeScript cache: `rm -rf dist`
+   - Rebuild: `npm run build`
 
 ## API Documentation
 The API documentation is available at `/api-docs` when the server is running. It provides detailed information about:

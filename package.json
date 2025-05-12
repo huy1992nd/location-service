@@ -1,5 +1,9 @@
 {
   "name": "location-based-service-search",
+  "author": {
+    "name": "Quang Huy",
+    "email": "quanghuynguyen331992@gmail.com"
+  },
   "version": "1.0.0",
   "description": "A system to search for services based on location",
   "main": "dist/app.js",
@@ -8,6 +12,8 @@
     "dev": "prisma generate && ts-node-dev --respawn src/app.ts",
     "build": "prisma generate && tsc",
     "test": "jest --runInBand --detectOpenHandles",
+    "test:watch": "jest --watch --runInBand --detectOpenHandles",
+    "test:coverage": "jest --coverage --runInBand --detectOpenHandles",
     "test:setup": "jest --runInBand --detectOpenHandles --setupFiles ./src/tests/setup.ts",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
