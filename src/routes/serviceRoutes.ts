@@ -1,5 +1,5 @@
 import express from 'express';
-import { searchServices } from '../controllers/serviceController';
+import { searchServicesController } from '../controllers/serviceController';
 
 const router = express.Router();
 
@@ -22,14 +22,14 @@ const router = express.Router();
  *           type: string
  *         description: Filter by service type
  *       - in: query
- *         name: lat
+ *         name: latitude
  *         required: true
  *         schema:
  *           type: number
  *           format: float
  *         description: Latitude coordinate
  *       - in: query
- *         name: lng
+ *         name: longitude
  *         required: true
  *         schema:
  *           type: number
@@ -48,9 +48,12 @@ const router = express.Router();
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Service'
+ *               type: object
+ *               properties:
+ *                 services:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Service'
  *       400:
  *         description: Invalid parameters
  *         content:
@@ -58,6 +61,6 @@ const router = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/search', searchServices);
+router.get('/search', searchServicesController);
 
 export default router; 
