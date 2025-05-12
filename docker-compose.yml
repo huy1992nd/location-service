@@ -13,7 +13,7 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
-    command: sh -c "npx prisma migrate deploy && npx prisma db seed && npm start"
+    command: sh -c "npm run build && npx prisma migrate deploy && npx prisma db seed && npm start"
 
   db:
     image: mysql:8.0
