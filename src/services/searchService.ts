@@ -15,9 +15,6 @@ const prisma = new PrismaClient();
 
 export const searchServices = async (request: SearchServicesRequest): Promise<SearchServicesResponse> => {
   const { name, type, latitude, longitude, radius } = request;
-
-  // Haversine formula in SQL to find services within radius
-  console.log(name, type, latitude, longitude, radius);
   const services = await prisma.$queryRaw`
     SELECT 
       id, name, type, latitude, longitude, address

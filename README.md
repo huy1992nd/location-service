@@ -22,12 +22,27 @@ location-service/
 │   ├── services/        # Business logic
 │   ├── routes/          # API routes
 │   ├── types/          # TypeScript type definitions
+│   ├── models/         # Data models
 │   ├── tests/          # Test files
-│   └── utils/          # Utility functions
+│   ├── interceptors/   # Request/Error interceptors
+│   ├── utils/          # Utility functions (logger, etc.)
+│   ├── app.ts          # Application entry point
+│   └── swagger.ts      # API documentation setup
 ├── prisma/             # Database schema and migrations
+├── logs/              # Application logs
+│   ├── error.log      # Error level logs
+│   └── combined.log   # All application logs
+├── .github/            # GitHub workflows and configurations
 ├── docker/             # Docker configuration files
-└── docs/              # Documentation
+├── Dockerfile          # Docker build instructions
+├── docker-compose.yml  # Docker services configuration
+├── jest.config.js      # Jest testing configuration
+└── tsconfig.json       # TypeScript configuration
 ```
+
+## Design database
+https://dbdiagram.io/d/6821fc665b2fc4582f39d49b
+
 
 ## Prerequisites
 - Node.js (v14 or higher)
